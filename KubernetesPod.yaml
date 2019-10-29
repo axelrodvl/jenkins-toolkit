@@ -1,0 +1,32 @@
+metadata:
+  labels:
+    some-label: some-label-value
+spec:
+  volumes:
+    - name: gradle-repo
+      persistentVolumeClaim:
+        claimName: gradle-repo
+  containers:
+    - name: jnlp
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: jnlp
+    - name: gradle
+      image: gradle:jdk11
+      command:
+        - cat
+      tty: true
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: gradle
+      volumeMounts:
+        - mountPath: "/home/jenkins/"
+          name: gradle-repo
+    - name: kubectl
+      image: lachlanevenson/k8s-kubectl:v1.8.0
+      command:
+        - cat
+      tty: true
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: kubectl
